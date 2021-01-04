@@ -71,13 +71,20 @@ def getWebcamFrame():
     driver.get('http://octopi.local/?#control')                             #send to webcam stream
     time.sleep(3)                                                           #wait for redirect
     driver.execute_script("window.scrollTo(1080, 0)")                       #scroll to top right
-    driver.save_screenshot("HomeworkRobot\\stream.png")                     #take screenshot
+    driver.save_screenshot("HomeworkRobot\\images\\stream.png")             #take screenshot
     driver.quit()                                                           #terminate driver
 
     #crop screenshot for parsing
     im = Image.open("HomeworkRobot\\stream.png")
-    im.crop((233, 108, 675, 439)).save("HomeworkRobot\\stream_crop.png", quality=100)
+    im.crop((233, 108, 675, 439)).save("HomeworkRobot\\images\\stream_crop.png", quality=100)
 
+#70D10AE2AB3048B8AEA90CD1F4B74C3D api key
+
+#def sendCommand():
+    #maybe connect by importing or shell
+    #might even be able to send the completed gcode file over tbh
+
+#TODO maybe move driver and other stuff organize filesystem
 # TODO clean this shit please
 
 # ok well its an action stream so i just need to download one frame
