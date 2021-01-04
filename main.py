@@ -6,11 +6,18 @@ import re
 import pytesseract as tess
 from PIL import Image
 from selenium import webdriver
+from tests import servertest
+from octocontrol import OctoprintAPI
 
 # set offset for image rotation, should be fed from electron later (potentially)
-offset = -90
+offset = -90 #or just prompt at the beginning or as an optional arg
 
-def getWebcamFrame(): #take screenshot of webcam as well as trim and rotate it by specified offset
+#test server
+def testConnection(ip,port):
+    return(servertest.tests().connectTest(ip,port))
+
+#take screenshot of webcam as well as trim and rotate it by specified offset
+def getWebcamFrame(): 
     # get octoprint login creds from file
     with open("loginCreds.txt", "r") as loginCreds:
         octoCreds = loginCreds.read().split(" ")
@@ -47,7 +54,8 @@ def getWebcamFrame(): #take screenshot of webcam as well as trim and rotate it b
     im = im.crop((160, 180, 745, 545))  # crop out corners
     im = im.rotate(offset, expand=True).save("images\\stream.png")  # rotate and save
 
-def calculateAnswer(): #parse the text from screenshot and calculate it as a multiplication problem
+#parse the text from screenshot and calculate it as a multiplication problem
+def calculateAnswer():
     #retrieve path on system to tesseract executable from file
     with open("tesseractPath.txt", "r") as tessPath:
         tess.pytesseract.tesseract_cmd = tessPath.read()
@@ -57,8 +65,12 @@ def calculateAnswer(): #parse the text from screenshot and calculate it as a mul
     text = text.split("x")
     return(int(text[0]) * int(text[1]))
 
-getWebcamFrame()
-print(calculateAnswer())
+#getWebcamFrame()
+#print(calculateAnswer())
+#print(testConnection("octopi.local","5000"))
+
+octoApi = OctoprintAPI("octopi.local",5000,"70D10AE2AB3048B8AEA90CD1F4B74C3D") #put key in file
+octoApi.send_gcode("G0 X10")
 
 # conscise TODO
 # - pipeline to send commands to printer
