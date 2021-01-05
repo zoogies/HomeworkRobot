@@ -62,7 +62,9 @@ def calculateAnswer():
 
     #convert image text to a list of strings seperated by the multiplication operand
     text = tess.image_to_string(Image.open('images\\stream.png'), lang='eng', config='-c tessedit_char_whitelist=1234567890x')
-    text = text.split("x")
+    text = text.split("x") #replace this with if statement for logical character contained and then decide how to solve the problem
+    #maybe find library that solves from string so that you can do anything
+    #check basic validity of answers before engraving
     return(int(text[0]) * int(text[1]))
 
 #getWebcamFrame()
