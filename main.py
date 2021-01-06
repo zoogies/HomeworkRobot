@@ -8,6 +8,7 @@ from PIL import Image
 from selenium import webdriver
 from tests import servertest
 from octocontrol import OctoprintAPI
+from gcodelibtest.textToGcode import textToGcode
 
 # set offset for image rotation, should be fed from electron later (potentially)
 offset = -90 #or just prompt at the beginning or as an optional arg
@@ -71,8 +72,10 @@ def calculateAnswer():
 #print(calculateAnswer())
 #print(testConnection("octopi.local","5000"))
 
-octoApi = OctoprintAPI("octopi.local",5000,"70D10AE2AB3048B8AEA90CD1F4B74C3D") #put key in file
-octoApi.send_gcode("G0 X10")
+#octoApi = OctoprintAPI("octopi.local",5000,"70D10AE2AB3048B8AEA90CD1F4B74C3D") #put key in file
+#octoApi.send_gcode("G0 X10")
+
+print(textToGcode("a",1,0).toGcode())
 
 # conscise TODO
 # - pipeline to send commands to printer
