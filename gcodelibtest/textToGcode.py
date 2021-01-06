@@ -5,8 +5,10 @@ class textToGcode:
         self.text = text
         self.size = size
         self.rotation = rotation
+        self.rotationNeeded = False
         self.charList = []
         self.origin = 0,0
+        #TODO:
         #the off on fast slow commands might be something 
         #you want to have them specify with args
         self.offCmd = "M5"
@@ -14,9 +16,35 @@ class textToGcode:
         self.fastCmd = "G0"
         self.slowCmd = "G1"
 
+        if self.rotation != 0:
+            self.rotationNeeded = True
+
     def split(self):
         for char in self.text:
             self.charList.append(char)
+
+    def parse(self,operations):
+        #TODO maybe replace this with enumerate bc your code is dogshit
+        i = 0
+        for command in operations:
+            #detect basic commands and set them to the basic user value
+            if command == "off":
+                operations[i] = self.offCmd
+            elif command == "on":
+                operations[i] = self.onCmd
+            elif command == "fast":
+                operations[i] = self.fastCmd
+            elif command == "slow":
+                operations[i] = self.slowCmd
+
+            if self.rotationNeeded: #here is where i rotate every point in operations before drawqueue
+                #https://stackoverflow.com/questions/34372480/rotate-point-about-another-point-in-degrees-python
+                break
+
+            i+=1
+        print(operations)
+        #TODO here is where i would pass to the drawqueue which would queue it based on whitespace between characters
+        #or maybe handle the whitespace in each parse idk ill have to see
 
     # height to width is 10:6
     #
@@ -55,49 +83,13 @@ class textToGcode:
 
         operations = []
 
-        #there has to be a way to do this with only one loop
+        #TODO there has to be a way to do this with only one loop
         for point in points:
             operations.append(point)
 
-        #maybe replace this with enumerate bc your code is dogshit
-        i = 0
-        for command in operations: #this shit needs moved out of a letter function bc im not writing this a million times,
-            #letter functions should just be a list of points and commands that referance the rotate and parse functions
-            #tbh the rotate should just be a check before trying to parse any letters and then if its not 0 we can just run it before output
-            #detect basic commands and set them to the basic user value
-            if command == "off":
-                operations[i] = self.offCmd
-            elif command == "on":
-                operations[i] = self.onCmd
-            elif command == "fast":
-                operations[i] = self.fastCmd
-            elif command == "slow":
-                operations[i] = self.slowCmd
+        #parse this letters points before sending to the draw queue
+        textToGcode.parse(self,operations)
 
-            if self.rotation != 0:
-                #https://stackoverflow.com/questions/34372480/rotate-point-about-another-point-in-degrees-python
-                break
-
-            i+=1
-        print(operations)
-
-        #https://stackoverflow.com/questions/15884527/how-can-i-prevent-the-typeerror-list-indices-must-be-integers-not-tuple-when-c
-        #my head hurts
-        """ 
-        for point in points:
-            if point != str:
-                operations.append(points[point] - points[point + 1])
-            elif point == str:
-                if point == "off":
-                    operations.append(self.offCmd)
-                elif point == "on":
-                    operations.append(self.onCmd)
-                elif point == "slow":
-                    operations.append(self.slowCmd)
-                elif point == "fast":
-                    operations.append(self.fastCmd)
-         """
-    
     def toGcode(self):
         textToGcode.split(self)
         for char in self.charList:
@@ -109,3 +101,4 @@ class textToGcode:
 # just to keep in mind if youre gonna publish this you should have 
 # multiple ways to return the values including an actual gcode file 
 # itself and not a list of commands
+#could add lowercase letters as well if you have time
