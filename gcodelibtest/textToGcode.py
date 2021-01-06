@@ -6,6 +6,10 @@ class textToGcode:
         self.size = size
         self.rotation = rotation
         self.charList = []
+        self.offCmd = "off"
+        self.onCmd = "on"
+        self.fastCmd = "fast"
+        self.slowCmd = "slow"
 
     def split(self):
         for char in self.text:
@@ -46,10 +50,23 @@ class textToGcode:
             (4,0)
         ]
 
+        operations = []
+
+        #https://stackoverflow.com/questions/15884527/how-can-i-prevent-the-typeerror-list-indices-must-be-integers-not-tuple-when-c
+        #my head hurts
+
         for point in points:
-            return([
-                points[point] - points[point + 1]
-            ])
+            if point != str:
+                operations.append(points[point] - points[point + 1])
+            elif point == str:
+                if point == "off":
+                    operations.append(self.offCmd)
+                elif point == "on":
+                    operations.append(self.onCmd)
+                elif point == "slow":
+                    operations.append(self.slowCmd)
+                elif point == "fast":
+                    operations.append(self.fastCmd)
 
     def toGcode(self):
         textToGcode.split(self)
