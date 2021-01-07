@@ -2,26 +2,30 @@ import math #for rotate later on
 
 class textToGcode:
     def __init__(self,text,size,rotation):
+        #set basic vars needed for processing text
         self.text = text
         self.size = size
         self.rotation = rotation
         self.rotationNeeded = False
         self.charList = []
         self.origin = 0,0
-        #TODO:
-        #the off on fast slow commands might be something 
-        #you want to have them specify with args
+
+        #set defualts commands, can be changed by calling changeCmds() first
         self.offCmd = "M5"
         self.onCmd = "M3"
         self.fastCmd = "G0"
         self.slowCmd = "G1"
 
+        #check if the user has specified a positive or negative rotation
         if self.rotation != 0:
             self.rotationNeeded = True
 
-    def split(self):
-        for char in self.text:
-            self.charList.append(char)
+    #function for customizing the G and M commands to allow for use on variety of machines
+    def changeCmds(self,off,on,fast,slow): #TODO maybe check if its a string or not?
+        self.offCmd = off
+        self.onCmd = on #TODO something is weird about this but i need to go to bed
+        self.fastCmd = fast
+        self.slowCmd = slow
 
     def parse(self,operations):
         #TODO maybe replace this with enumerate bc your code is dogshit
@@ -87,18 +91,23 @@ class textToGcode:
         for point in points:
             operations.append(point)
 
-        #parse this letters points before sending to the draw queue
+        # parse this letters points before sending to the draw queue
         textToGcode.parse(self,operations)
 
+    # function to split text up into its characters, called on by toGcode()
+    def split(self):
+        for char in self.text:             #TODO check if it works with spaces and anomylous characters
+            self.charList.append(char)
+
+    # main function called upon by program, starts the flow of splitting parsing
+    # and converting the text, then adding it to the draw queue and returning it
     def toGcode(self):
         textToGcode.split(self)
         for char in self.charList:
             if(char == "a" or "A"):
                 return(textToGcode.a(self))
 
-
-
 # just to keep in mind if youre gonna publish this you should have 
 # multiple ways to return the values including an actual gcode file 
 # itself and not a list of commands
-#could add lowercase letters as well if you have time
+# could add lowercase letters as well if you have time

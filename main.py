@@ -75,7 +75,7 @@ def calculateAnswer():
 #octoApi = OctoprintAPI("octopi.local",5000,"70D10AE2AB3048B8AEA90CD1F4B74C3D") #put key in file
 #octoApi.send_gcode("G0 X10")
 
-print(textToGcode("a",1,0).toGcode())
+print(textToGcode("a",1,0).toGcode()) #change cmds is broken
 
 # conscise TODO
 # - pipeline to send commands to printer
