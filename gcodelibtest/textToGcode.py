@@ -9,6 +9,8 @@ class textToGcode:
         self.rotationNeeded = False
         self.charList = []
         self.origin = 0,0
+        self.readyForReturn = False
+        self.points = []
 
         # set defualts commands, can be changed by calling changeCmds() first
         self.offCmd = "M5"
@@ -18,7 +20,7 @@ class textToGcode:
 
         # check if the user has specified a positive or negative rotation
         if self.rotation != 0:
-            self.rotationNeeded = True
+            self.rotationNeeded = True 
 
     def parse(self,operations):
         # TODO maybe replace this with enumerate bc your code is dogshit
@@ -34,18 +36,24 @@ class textToGcode:
             elif command == "slow":
                 operations[i] = self.slowCmd
 
+            self.rotationNeeded = True #testing
+
+            #this might actually need to go into its own function later for self.points bc youll need it to calculate toolpath
             if self.rotationNeeded: # here is where i rotate every point in operations before drawqueue
                 # https://stackoverflow.com/questions/34372480/rotate-point-about-another-point-in-degrees-python
                 # clean up list to only contain tuples
-                points = operations # TODO remove, testing
-                i=0 # TODO enumerate
-                for point in points: # TODO why is this here, what did i just do
+                self.points = operations # create copy of list so we can remove all strings
+                ii=0 # TODO enumerate
+                for point in self.points:
                     if not isinstance(point, tuple):
-                        points.remove(i)
-                i+=1
-                print(points)
+                        del self.points[ii]
+                    ii+=1
 
             i+=1
+
+        self.readyForReturn = True
+        textToGcode.toGcode(self)
+
         #print(operations)
         # TODO here is where i would pass to the drawqueue which would queue it based on whitespace between characters
         # or maybe handle the whitespace in each parse idk ill have to see
@@ -102,10 +110,14 @@ class textToGcode:
     # main function called upon by program, starts the flow of splitting parsing
     # and converting the text, then adding it to the draw queue and returning it
     def toGcode(self):
-        textToGcode.split(self)
-        for char in self.charList:
-            if(char == "a" or "A"):
-                return(textToGcode.a(self))
+        if(self.readyForReturn == False):
+            textToGcode.split(self)
+            for char in self.charList:
+                if(char == "a" or "A"):
+                    textToGcode.a(self)
+        elif(self.readyForReturn):
+            x = self.points
+            return x # this returns none WHY?!?!?!??!
 
     # same as to gcode, but allows user to pass args for custom commands
     def toGcodeWithArgs(self,offCode,onCode,fastCode,slowCode): # TODO maybe get better naming convention
@@ -115,16 +127,12 @@ class textToGcode:
         self.slowCmd = slowCode
 
         textToGcode.split(self)
-        for char in self.charList:
+        for char in self.charList: # TODO update and fix this shit
             if(char == "a" or "A"):
-                return(textToGcode.a(self))
-
-    def queueDraw(self):
-        print('placeholder') #im dumb at its like 1am
-        #draw queue
+                textToGcode.a(self)
 
 # just to keep in mind if youre gonna publish this you should have 
 # multiple ways to return the values including an actual gcode file 
 # itself and not a list of commands
 # could add lowercase letters as well if you have time
-# TODO rearange layout of functions in file
+# TODO rearange layout of functions in file https://salishsea-meopar-tools.readthedocs.io/en/latest/python_packaging/library_code.html

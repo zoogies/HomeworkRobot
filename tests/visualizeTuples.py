@@ -2,6 +2,8 @@ from gcodelibtest.textToGcode import textToGcode
 
 # https://stackoverflow.com/questions/18458734/how-do-i-plot-list-of-tuples-in-python
 
+# TODO wtf is this
+
 class tests:
     def fetchTuples(self):
         #collect tuples

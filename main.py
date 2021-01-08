@@ -7,7 +7,7 @@ import pytesseract as tess
 from PIL import Image
 from selenium import webdriver
 from tests import servertest
-from tests import visualizeTuples
+#from tests import visualizeTuples
 from octocontrol import OctoprintAPI
 from gcodelibtest.textToGcode import textToGcode
 import matplotlib.pyplot as plt
@@ -70,15 +70,8 @@ def calculateAnswer():
     #check basic validity of answers before engraving
     return(int(text[0]) * int(text[1]))
 
-def previewTuples():
-    tuples = visualizeTuples.tests().fetchTuples()
-
-    x_val = [x[0] for x in tuples]
-    y_val = [x[1] for x in tuples]
-                                    # TODO why is this here, what did i just do
-    plt.plot(x_val,y_val)
-    plt.plot(x_val,y_val,'or')
-    plt.show()
+    def visualize():
+        tuples = textToGcode("a",1,0).toGcode()
 
 #getWebcamFrame()
 #print(calculateAnswer())
@@ -89,7 +82,8 @@ def previewTuples():
 
 #print(textToGcode("a",1,0).toGcode()) #change cmds is broken
 #print(textToGcode("a",1,0).toGcodeWithArgs("OFF","ON","FAST","SLOW"))
-textToGcode("a",1,0).toGcode()
+print(textToGcode("a",1,0).toGcode()) 
+
 #previewTuples()
 
 # conscise TODO
