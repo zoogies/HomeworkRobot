@@ -1,8 +1,8 @@
-import math #for rotate later on
+import math # for rotate later on
 
 class textToGcode:
     def __init__(self,text,size,rotation):
-        #set basic vars needed for processing text
+        # set basic vars needed for processing text
         self.text = text
         self.size = size
         self.rotation = rotation
@@ -10,28 +10,21 @@ class textToGcode:
         self.charList = []
         self.origin = 0,0
 
-        #set defualts commands, can be changed by calling changeCmds() first
+        # set defualts commands, can be changed by calling changeCmds() first
         self.offCmd = "M5"
         self.onCmd = "M3"
         self.fastCmd = "G0"
         self.slowCmd = "G1"
 
-        #check if the user has specified a positive or negative rotation
+        # check if the user has specified a positive or negative rotation
         if self.rotation != 0:
             self.rotationNeeded = True
 
-    #function for customizing the G and M commands to allow for use on variety of machines
-    def changeCmds(self,off,on,fast,slow): #TODO maybe check if its a string or not?
-        self.offCmd = off
-        self.onCmd = on #TODO something is weird about this but i need to go to bed
-        self.fastCmd = fast
-        self.slowCmd = slow
-
     def parse(self,operations):
-        #TODO maybe replace this with enumerate bc your code is dogshit
+        # TODO maybe replace this with enumerate bc your code is dogshit
         i = 0
         for command in operations:
-            #detect basic commands and set them to the basic user value
+            # detect basic commands and set them to the basic user value
             if command == "off":
                 operations[i] = self.offCmd
             elif command == "on":
@@ -41,14 +34,21 @@ class textToGcode:
             elif command == "slow":
                 operations[i] = self.slowCmd
 
-            if self.rotationNeeded: #here is where i rotate every point in operations before drawqueue
-                #https://stackoverflow.com/questions/34372480/rotate-point-about-another-point-in-degrees-python
-                break
+            if self.rotationNeeded: # here is where i rotate every point in operations before drawqueue
+                # https://stackoverflow.com/questions/34372480/rotate-point-about-another-point-in-degrees-python
+                # clean up list to only contain tuples
+                points = operations # TODO remove, testing
+                i=0 # TODO enumerate
+                for point in points: # TODO why is this here, what did i just do
+                    if not isinstance(point, tuple):
+                        points.remove(i)
+                i+=1
+                print(points)
 
             i+=1
-        print(operations)
-        #TODO here is where i would pass to the drawqueue which would queue it based on whitespace between characters
-        #or maybe handle the whitespace in each parse idk ill have to see
+        #print(operations)
+        # TODO here is where i would pass to the drawqueue which would queue it based on whitespace between characters
+        # or maybe handle the whitespace in each parse idk ill have to see
 
     # height to width is 10:6
     #
@@ -77,7 +77,7 @@ class textToGcode:
             (1,2),
             (0,2),
             "off",
-            #"fast",
+            "fast",
             (4,2),
             "on",
             "slow",
@@ -87,7 +87,7 @@ class textToGcode:
 
         operations = []
 
-        #TODO there has to be a way to do this with only one loop
+        # TODO there has to be a way to do this with only one loop
         for point in points:
             operations.append(point)
 
@@ -96,7 +96,7 @@ class textToGcode:
 
     # function to split text up into its characters, called on by toGcode()
     def split(self):
-        for char in self.text:             #TODO check if it works with spaces and anomylous characters
+        for char in self.text:             # TODO check if it works with spaces and anomylous characters
             self.charList.append(char)
 
     # main function called upon by program, starts the flow of splitting parsing
@@ -107,7 +107,24 @@ class textToGcode:
             if(char == "a" or "A"):
                 return(textToGcode.a(self))
 
+    # same as to gcode, but allows user to pass args for custom commands
+    def toGcodeWithArgs(self,offCode,onCode,fastCode,slowCode): # TODO maybe get better naming convention
+        self.offCmd = offCode
+        self.onCmd = onCode         # TODO revisit this passing args system, there has to be a 
+        self.fastCmd = fastCode     # better way and to make it more accessible to people
+        self.slowCmd = slowCode
+
+        textToGcode.split(self)
+        for char in self.charList:
+            if(char == "a" or "A"):
+                return(textToGcode.a(self))
+
+    def queueDraw(self):
+        print('placeholder') #im dumb at its like 1am
+        #draw queue
+
 # just to keep in mind if youre gonna publish this you should have 
 # multiple ways to return the values including an actual gcode file 
 # itself and not a list of commands
 # could add lowercase letters as well if you have time
+# TODO rearange layout of functions in file
