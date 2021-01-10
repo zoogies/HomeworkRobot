@@ -117,7 +117,8 @@ class textToGcode:
                     textToGcode.a(self)
         elif(self.readyForReturn):
             x = self.points
-            return x # this returns none WHY?!?!?!??!
+            print(x)
+            return x
 
     # same as to gcode, but allows user to pass args for custom commands
     def toGcodeWithArgs(self,offCode,onCode,fastCode,slowCode): # TODO maybe get better naming convention

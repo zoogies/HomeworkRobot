@@ -70,8 +70,8 @@ def calculateAnswer():
     #check basic validity of answers before engraving
     return(int(text[0]) * int(text[1]))
 
-    def visualize():
-        tuples = textToGcode("a",1,0).toGcode()
+def visualize():
+    tuples = textToGcode("a",1,0).toGcode()
 
 #getWebcamFrame()
 #print(calculateAnswer())
@@ -82,7 +82,7 @@ def calculateAnswer():
 
 #print(textToGcode("a",1,0).toGcode()) #change cmds is broken
 #print(textToGcode("a",1,0).toGcodeWithArgs("OFF","ON","FAST","SLOW"))
-print(textToGcode("a",1,0).toGcode()) 
+print(textToGcode("a",1,0).toGcode())
 
 #previewTuples()
 
