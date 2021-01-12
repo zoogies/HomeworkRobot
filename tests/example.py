@@ -6,10 +6,10 @@ class test:
     def secondFunction(self):
         print("second function ran")
         self.readyforreturn = True
-        test.main(self)
+        return test.main(self)
 
     def main(self):
         if not self.readyforreturn:
-            test.secondFunction(self)
+            return test.secondFunction(self)
         else:
             return self.text
