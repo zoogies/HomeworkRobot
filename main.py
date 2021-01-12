@@ -7,20 +7,21 @@ import pytesseract as tess
 from PIL import Image
 from selenium import webdriver
 from tests import servertest
-#from tests import visualizeTuples
 from octocontrol import OctoprintAPI
-from gcodeLib.textToGcode import textToGcode
+
+from gcodeLib.rewrite import ttg
+
 import matplotlib.pyplot as plt
 from tests.example import test
 
 # set offset for image rotation, should be fed from electron later (potentially)
 offset = -90 #or just prompt at the beginning or as an optional arg
 
-#test server
+# test server connection
 def testConnection(ip,port):
     return(servertest.tests().connectTest(ip,port))
 
-#take screenshot of webcam as well as trim and rotate it by specified offset
+# take screenshot of webcam as well as trim and rotate it by specified offset
 def getWebcamFrame(): 
     # get octoprint login creds from file
     with open("loginCreds.txt", "r") as loginCreds:
@@ -58,35 +59,20 @@ def getWebcamFrame():
     im = im.crop((160, 180, 745, 545))  # crop out corners
     im = im.rotate(offset, expand=True).save("images\\stream.png")  # rotate and save
 
-#parse the text from screenshot and calculate it as a multiplication problem
+# parse the text from screenshot and calculate it as a multiplication problem
 def calculateAnswer():
-    #retrieve path on system to tesseract executable from file
+    # retrieve path on system to tesseract executable from file
     with open("tesseractPath.txt", "r") as tessPath:
         tess.pytesseract.tesseract_cmd = tessPath.read()
 
-    #convert image text to a list of strings seperated by the multiplication operand
+    # convert image text to a list of strings seperated by the multiplication operand
     text = tess.image_to_string(Image.open('images\\stream.png'), lang='eng', config='-c tessedit_char_whitelist=1234567890x')
     text = text.split("x") #replace this with if statement for logical character contained and then decide how to solve the problem
-    #maybe find library that solves from string so that you can do anything
-    #check basic validity of answers before engraving
+    # maybe find library that solves from string so that you can do anything
+    # check basic validity of answers before engraving
     return(int(text[0]) * int(text[1]))
 
-def visualize():
-    tuplesss = textToGcode("a",1,0).toGcode()
-    print(tuplesss)
-
-#getWebcamFrame()
-#print(calculateAnswer())
-#print(testConnection("octopi.local","5000"))
-
-#octoApi = OctoprintAPI("octopi.local",5000,"70D10AE2AB3048B8AEA90CD1F4B74C3D") #put key in file
-#octoApi.send_gcode("G0 X10")
-
-#print(textToGcode("a",1,0).toGcode()) #change cmds is broken
-#print(textToGcode("a",1,0).toGcodeWithArgs("OFF","ON","FAST","SLOW"))
-#visualize()
-print(test().main())
-#previewTuples()
+print(ttg("a",1,0).toGcodeCustom("return","ON","OFF","FAST","SLOW"))
 
 # conscise TODO
 # - pipeline to send commands to printer
