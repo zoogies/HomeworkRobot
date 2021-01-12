@@ -110,6 +110,7 @@ class textToGcode:
     # main function called upon by program, starts the flow of splitting parsing
     # and converting the text, then adding it to the draw queue and returning it
     def toGcode(self):
+        global x
         if(self.readyForReturn == False):
             textToGcode.split(self)
             for char in self.charList:
@@ -117,7 +118,6 @@ class textToGcode:
                     textToGcode.a(self)
         elif(self.readyForReturn):
             x = self.points
-            print(x)
             return x
 
     # same as to gcode, but allows user to pass args for custom commands

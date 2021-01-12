@@ -9,8 +9,9 @@ from selenium import webdriver
 from tests import servertest
 #from tests import visualizeTuples
 from octocontrol import OctoprintAPI
-from gcodelibtest.textToGcode import textToGcode
+from gcodeLib.textToGcode import textToGcode
 import matplotlib.pyplot as plt
+from tests.example import test
 
 # set offset for image rotation, should be fed from electron later (potentially)
 offset = -90 #or just prompt at the beginning or as an optional arg
@@ -71,7 +72,8 @@ def calculateAnswer():
     return(int(text[0]) * int(text[1]))
 
 def visualize():
-    tuples = textToGcode("a",1,0).toGcode()
+    tuplesss = textToGcode("a",1,0).toGcode()
+    print(tuplesss)
 
 #getWebcamFrame()
 #print(calculateAnswer())
@@ -82,8 +84,8 @@ def visualize():
 
 #print(textToGcode("a",1,0).toGcode()) #change cmds is broken
 #print(textToGcode("a",1,0).toGcodeWithArgs("OFF","ON","FAST","SLOW"))
-print(textToGcode("a",1,0).toGcode())
-
+#visualize()
+print(test().main())
 #previewTuples()
 
 # conscise TODO
