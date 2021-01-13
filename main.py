@@ -82,10 +82,10 @@ def calculateAnswer():
     return int(text[0]) * int(text[1])
 
 
-def visualize():
+def visualize():  # consider moving this into a test
     plotlist = []
 
-    for item in ttg("a", 1, math.radians(0)).toGcodeCustom(
+    for item in ttg("a aaa  a", 1, math.radians(0)).toGcodeCustom(
         "return", "ON", "OFF", "FAST", "SLOW"
     ):
         if type(item) is tuple:

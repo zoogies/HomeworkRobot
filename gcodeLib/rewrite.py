@@ -1,8 +1,13 @@
 # TODO naming convention of basically everything
 # double check globals, can prob abstract away many things
 # add if switch for returns only if method is return
+# check whitespace
+# return all letters
+# fix bug with adding extra A to front
 
 import math
+import time
+import asyncio
 
 
 class ttg:
@@ -15,6 +20,9 @@ class ttg:
         # set global class vars
         self.rotationNeeded = False
         self.readyForReturn = False
+        self.operations = []
+        self.currentXOffset = 0
+        self.parsed = False
 
         # set defualts commands, TODO have function thats toGcode with custom commands
         self.offCmd = "M5"
@@ -26,87 +34,81 @@ class ttg:
         if self.rotation != 0:
             self.rotationNeeded = True
 
-    def finalize(self, operations):
-        """
-        for operation in operations:
-            gcodeCmdList.append[self.fastCmd + "x"]
-            break  # placeholder for condensing to single lines
-        """
-        # gcodeCmdList = []
-        # gcodeCmdList.append("pog")
+    def rotate(self):
+        newOps = []
 
-        return gcodeCmdList
+        for point in self.operations:
+            if type(point) is tuple:
+                originX = 0  # TODO let this be specified?
+                originY = 0
+                newpointX = (
+                    originX
+                    + math.cos(self.rotation) * (point[0] - originX)
+                    - math.sin(self.rotation) * (point[1] - originY)
+                )
+                newpointY = (
+                    originY
+                    + math.sin(self.rotation) * (point[0] - originX)
+                    + math.cos(self.rotation) * (point[1] - originY)
+                )
+                newpoint = (newpointX, newpointY)
+                newOps.append(newpoint)
+            elif isinstance(point, str):
+                newOps.append(point)
+
+        self.operations.clear()
+        self.operations = newOps
+
+        # replace all commands in one sweep
+        for count, command in enumerate(self.operations):
+            if command == "off":
+                self.operations[count] = self.offCmd
+            elif command == "on":
+                self.operations[count] = self.onCmd
+            elif command == "fast":
+                self.operations[count] = self.fastCmd
+            elif command == "slow":
+                self.operations[count] = self.slowCmd
+
+    def tempOpAdd(self, points):
+        for point in points:
+            self.operations.append(point)
 
     # LETTER FUNCTIONS
 
+    def whiteSpace(self):
+        self.currentXOffset += 4  # TODO check if this is right for character spaces
+
     def a(self):
+        xOff = self.currentXOffset
+
         points = [
-            (0, 0),
-            (0, 1),
-            (0, 2),
-            (0, 3),
-            (0, 4),
-            (1, 5),
-            (2, 5),
-            (3, 5),
-            (4, 4),
-            (4, 3),
-            (4, 2),
-            (3, 2),
-            (2, 2),
-            (1, 2),
-            (0, 2),
+            (0 + xOff, 0),
+            (0 + xOff, 1),
+            (0 + xOff, 2),
+            (0 + xOff, 3),
+            (0 + xOff, 4),
+            (1 + xOff, 5),
+            (2 + xOff, 5),
+            (3 + xOff, 5),
+            (4 + xOff, 4),
+            (4 + xOff, 3),
+            (4 + xOff, 2),
+            (3 + xOff, 2),
+            (2 + xOff, 2),
+            (1 + xOff, 2),
+            (0 + xOff, 2),
             "off",
             "fast",
-            (4, 2),
+            (4 + xOff, 2),
             "on",
             "slow",
-            (4, 1),
-            (4, 0),
+            (4 + xOff, 1),
+            (4 + xOff, 0)
+            # TODO need to add default space between characters
         ]
 
-        operations = []
-
-        if self.rotationNeeded:
-            for point in points:
-                if type(point) is tuple:
-                    originX = 0  # TODO let this be specified?
-                    originY = 0  # decide if even needed
-
-                    newpointX = (
-                        originX
-                        + math.cos(self.rotation) * (point[0] - originX)
-                        - math.sin(self.rotation) * (point[1] - originY)
-                    )
-                    newpointY = (
-                        originY
-                        + math.sin(self.rotation) * (point[0] - originX)
-                        + math.cos(self.rotation) * (point[1] - originY)
-                    )
-                    newpoint = (newpointX, newpointY)
-
-                    operations.append(newpoint)
-
-                elif isinstance(point, str):
-                    operations.append(point)
-
-        else:
-            for point in points:
-                operations.append(point)
-
-        # replace string commands with their specified gcode commands
-        for count, command in enumerate(operations):
-            if command == "off":
-                operations[count] = self.offCmd
-            elif command == "on":
-                operations[count] = self.onCmd
-            elif command == "fast":
-                operations[count] = self.fastCmd
-            elif command == "slow":
-                operations[count] = self.slowCmd
-
-        # return ttg.finalize(self, operations)
-        return operations  # debug
+        ttg.tempOpAdd(self, points)
 
     # FOOTER
 
@@ -118,12 +120,23 @@ class ttg:
             charList.append(char)
 
         for char in charList:
-            if char == "a" or "A":
-                return ttg.a(self)
+            if char == " ":
+                ttg.whiteSpace(self)
+                self.currentXOffset += 8
+
+            elif char == "a" or "A":
+                ttg.a(self)
+                self.currentXOffset += 8
+
+        ttg.rotate(self)
+
+        return self.operations  # DEBUG
 
     def toGcode(self, method):
         if self.readyForReturn and method == "return":
+            # TODO make method a self and decide between make file and return at end of parse
             return "TODO placeholder"
+
         elif not self.readyForReturn:
             return ttg.collectCharacters(self)
 
@@ -133,5 +146,5 @@ class ttg:
         self.fastCmd = fast
         self.slowCmd = slow
 
-        if method == "return":  # make this have parity
+        if method == "return":  # TODO make this have parity
             return ttg.toGcode(self, method)
