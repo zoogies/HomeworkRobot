@@ -4,10 +4,10 @@
 # check whitespace
 # return all letters
 # fix bug with adding extra A to front
+# bug with repeating letters
 
 import math
 import time
-import asyncio
 
 
 class ttg:
@@ -79,7 +79,7 @@ class ttg:
     def whiteSpace(self):
         self.currentXOffset += 4  # TODO check if this is right for character spaces
 
-    def a(self):
+    def a(self):  # TODO rewrite
         xOff = self.currentXOffset
 
         points = [
@@ -104,8 +104,88 @@ class ttg:
             "on",
             "slow",
             (4 + xOff, 1),
-            (4 + xOff, 0)
-            # TODO need to add default space between characters
+            (4 + xOff, 0),
+        ]
+
+        ttg.tempOpAdd(self, points)
+
+    # TODO alright heres the requirements for letter verts
+    # - every point has a tuple
+    # - off on fast slow
+    # - every list starts with on and ends with off
+    # TODO rewrite space as not just offset
+
+    #   .   .   .   .
+    #   .               .
+    #   .                   .
+    #   .                   .
+    #   .               .
+    #   .   .   .   .
+    #   .               .
+    #   .                   .
+    #   .                   .
+    #   .   .   .   .   .
+
+    def b(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (0 + xOff, 0),
+            (0 + xOff, 9),
+            (3 + xOff, 9),
+            (4 + xOff, 8),
+            (5 + xOff, 7),
+            (5 + xOff, 6),
+            (4 + xOff, 5),
+            (3 + xOff, 4),
+            (0 + xOff, 4),
+            "off",
+            "fast",
+            (3 + xOff, 4),
+            "on",
+            "slow",
+            (4 + xOff, 3),
+            (5 + xOff, 2),
+            (5 + xOff, 1),
+            (4 + xOff, 0),
+            (0 + xOff, 0),
+            "off",
+        ]
+
+        ttg.tempOpAdd(self, points)
+
+    #       .   .   .   .
+    #   .                   .
+    #   .
+    #   .
+    #   .
+    #   .
+    #   .
+    #   .
+    #   .                   .
+    #       .   .   .   .
+
+    def c(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "off",
+            "fast",
+            (5 + xOff, 1),
+            "on",
+            "slow",
+            (4 + xOff, 0),
+            (1 + xOff, 0),
+            (0 + xOff, 1),
+            (0 + xOff, 8),
+            (1 + xOff, 9),
+            (4 + xOff, 9),
+            (5 + xOff, 8),
+            "off",
+            "fast",
+            (0 + xOff, 0),
         ]
 
         ttg.tempOpAdd(self, points)
@@ -122,6 +202,14 @@ class ttg:
         for char in charList:
             if char == " ":
                 ttg.whiteSpace(self)
+                self.currentXOffset += 8
+
+            elif char == "c" or "C":
+                ttg.c(self)
+                self.currentXOffset += 8
+
+            elif char == "b" or "B":
+                ttg.b(self)
                 self.currentXOffset += 8
 
             elif char == "a" or "A":

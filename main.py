@@ -1,5 +1,6 @@
 # imports
 import time
+import datetime
 import re
 import pytesseract as tess
 from PIL import Image
@@ -85,7 +86,7 @@ def calculateAnswer():
 def visualize():  # consider moving this into a test
     plotlist = []
 
-    for item in ttg("a aaa  a", 1, math.radians(0)).toGcodeCustom(
+    for item in ttg("b", 1, math.radians(0)).toGcodeCustom(
         "return", "ON", "OFF", "FAST", "SLOW"
     ):
         if type(item) is tuple:
