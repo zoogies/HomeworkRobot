@@ -1,7 +1,6 @@
 # imports
 import time
 import datetime
-import re
 import pytesseract as tess
 from PIL import Image
 from selenium import webdriver

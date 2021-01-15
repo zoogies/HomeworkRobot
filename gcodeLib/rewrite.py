@@ -1,10 +1,7 @@
 # TODO naming convention of basically everything
 # double check globals, can prob abstract away many things
 # add if switch for returns only if method is return
-# check whitespace
-# return all letters
-# fix bug with adding extra A to front
-# bug with repeating letters
+# TODO consider putting all the letters in their own class/file/seperate files
 
 import math
 import time
@@ -34,12 +31,12 @@ class ttg:
         if self.rotation != 0:
             self.rotationNeeded = True
 
-    def rotate(self):
+    def finalize(self):
         newOps = []
 
         for point in self.operations:
             if type(point) is tuple:
-                originX = 0  # TODO let this be specified?
+                originX = 0
                 originY = 0
                 newpointX = (
                     originX
@@ -59,7 +56,7 @@ class ttg:
         self.operations.clear()
         self.operations = newOps
 
-        # replace all commands in one sweep
+        # replace placeholder string commands with GCODE commands
         for count, command in enumerate(self.operations):
             if command == "off":
                 self.operations[count] = self.offCmd
@@ -70,6 +67,8 @@ class ttg:
             elif command == "slow":
                 self.operations[count] = self.slowCmd
 
+    # TODO find a way to get rid of this function
+    # TODO rewrite space as not just offset
     def tempOpAdd(self, points):
         for point in points:
             self.operations.append(point)
@@ -113,7 +112,6 @@ class ttg:
     # - every point has a tuple
     # - off on fast slow
     # - every list starts with on and ends with off
-    # TODO rewrite space as not just offset
 
     #   .   .   .   .
     #   .               .
@@ -216,7 +214,7 @@ class ttg:
                 ttg.a(self)
                 self.currentXOffset += 8
 
-        ttg.rotate(self)
+        ttg.finalize(self)
 
         return self.operations  # DEBUG
 
