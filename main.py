@@ -11,11 +11,10 @@ from gcodeLib.rewrite import ttg
 
 import matplotlib.pyplot as plt
 import math
-from tests.example import test
 
 # set offset for image rotation, should be fed from electron later (potentially)
 offset = -90  # or just prompt at the beginning or as an optional arg
-
+# TODO class?
 # test server connection
 def testConnection(ip, port):
     return servertest.tests().connectTest(ip, port)
@@ -85,7 +84,7 @@ def calculateAnswer():
 def visualize():  # consider moving this into a test
     plotlist = []
 
-    for item in ttg("a b c   abc", 1, math.radians(90), "visualize").toGcodeCustom(
+    for item in ttg("a b c   abc", 1, math.radians(offset), "visualize").toGcodeCustom(
         "ON", "OFF", "FAST", "SLOW"
     ):
         if type(item) is tuple:

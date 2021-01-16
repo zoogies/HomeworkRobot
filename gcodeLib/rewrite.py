@@ -1,9 +1,7 @@
 # TODO naming convention of basically everything
 # double check globals, can prob abstract away many things
-# add if switch for returns only if method is return
 # TODO consider putting all the letters in their own class/file/seperate files
-# TODO rewrite space as not just offset
-# TODO do i need to end at 0,0?
+# TODO rewrite space as not just offset -- Why did i say this?
 
 import math
 import time
@@ -238,5 +236,4 @@ class ttg:
         self.fastCmd = fast
         self.slowCmd = slow
 
-        if self.method == "visualize":
-            return ttg.toGcode(self)
+        return ttg.toGcode(self)
