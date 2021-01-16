@@ -10,21 +10,22 @@ from octocontrol import OctoprintAPI
 from gcodeLib.rewrite import ttg
 
 import matplotlib.pyplot as plt
-import math
+import math  # TODO pair down imports
 
 # set offset for image rotation, should be fed from electron later (potentially)
-offset = -90  # or just prompt at the beginning or as an optional arg
-# TODO class?
+offset = 0  # or just prompt at the beginning or as an optional arg
+octoCreds = ""
+waitTime = 30
 # test server connection
 def testConnection(ip, port):
     return servertest.tests().connectTest(ip, port)
 
 
-# take screenshot of webcam as well as trim and rotate it by specified offset
-def getWebcamFrame():
+def createDriver(octoCreds):
     # get octoprint login creds from file
-    with open("loginCreds.txt", "r") as loginCreds:
-        octoCreds = loginCreds.read().split(" ")
+    if octoCreds == "":
+        with open("loginCreds.txt", "r") as loginCreds:
+            octoCreds = loginCreds.read().split(" ")
 
     # create headless webdriver
     op = webdriver.ChromeOptions()
@@ -45,7 +46,15 @@ def getWebcamFrame():
 
     print(datetime.datetime.now(), "- logged in")
 
-    time.sleep(6)  # wait for stream to load
+    return driver
+
+
+# take screenshot of webcam as well as trim and rotate it by specified offset
+def getWebcamFrame(waitTime):
+
+    driver = createDriver(octoCreds)  # create a new driver
+
+    time.sleep(waitTime)  # wait for stream to load
     driver.execute_script("window.scrollTo(1080, 0)")  # scroll to top right
     driver.save_screenshot("images\\stream.png")  # take screenshot
 
@@ -84,21 +93,33 @@ def calculateAnswer():
 def visualize():  # consider moving this into a test
     plotlist = []
 
-    for item in ttg("a b c   abc", 1, math.radians(offset), "visualize").toGcodeCustom(
+    for item in ttg("a b c   abc", 1, math.radians(offset), "visualize").toGcode(
         "ON", "OFF", "FAST", "SLOW"
     ):
         if type(item) is tuple:
             plotlist.append(item)
 
-    print(plotlist)
+    print("plotlist:", plotlist)
     pltx = []
     plty = []
-    for count, item in enumerate(plotlist):
-        pltx.append(item[0])
-        plty.append(item[1])
+
+    for tup in plotlist:
+        pltx.append(tup[0])
+        plty.append(tup[1])
 
     plt.scatter(pltx, plty)
     plt.show()
+
+
+def sendCommands():
+    createDriver(octoCreds)
+
+
+getWebcamFrame(waitTime)
+calculateAnswer()
+
+# text size in mm
+# S50 isnt nearly enough to engrave
 
 
 visualize()

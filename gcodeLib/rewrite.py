@@ -5,6 +5,7 @@
 
 import math
 import time
+from os import rename, remove
 
 
 class ttg:
@@ -34,7 +35,7 @@ class ttg:
             self.rotationNeeded = True
 
     def finalize(self):
-        newOps = []
+        finalOperations = []
 
         for point in self.operations:
             if type(point) is tuple:
@@ -51,27 +52,80 @@ class ttg:
                     + math.cos(self.rotation) * (point[1] - originY)
                 )
                 newpoint = (newpointX, newpointY)
-                newOps.append(newpoint)
+                finalOperations.append(newpoint)
             elif isinstance(point, str):
-                newOps.append(point)
-
-        self.operations.clear()
-        self.operations = newOps
-        self.verts += newOps  # TODO might be redundant
+                finalOperations.append(point)
 
         # replace placeholder string commands with GCODE commands
-        for count, command in enumerate(self.operations):
+        for count, command in enumerate(finalOperations):
             if command == "off":
-                self.operations[count] = self.offCmd
+                finalOperations[count] = self.offPowerCmd
             elif command == "on":
-                self.operations[count] = self.onCmd
+                finalOperations[count] = self.onPowerCmd
             elif command == "fast":
-                self.operations[count] = self.fastCmd
+                finalOperations[count] = self.fastCmd
             elif command == "slow":
-                self.operations[count] = self.slowCmd
+                finalOperations[count] = self.slowCmd
 
         if self.method == "visualize":
-            return newOps
+            return finalOperations
+
+        elif self.method == "return" or self.method == "file":
+            if self.method == "file":
+                try:
+                    remove("output.txt")
+                except:
+                    pass
+                gFile = open("output.txt", "a")
+
+            returnList = []
+            lastMoveType = ""
+
+            for command in finalOperations:
+                currentCommand = ""
+
+                if command == self.onPowerCmd:
+                    currentCommand = self.onPowerCmd
+                elif command == self.offPowerCmd:
+                    currentCommand = self.offPowerCmd
+
+                if command == self.slowCmd:
+                    lastMoveType = "slow"
+                    pass
+                elif command == self.fastCmd:
+                    lastMoveType = "slow"
+                    pass
+
+                if type(command) == tuple:
+                    if lastMoveType == "slow":
+                        currentCommand += self.slowCmd
+                    elif lastMoveType == "fast":
+                        currentCommand += self.fastCmd
+                    # TODO text size
+                    currentCommand += " X" + str(command[0])
+                    currentCommand += " Y" + str(command[1])
+
+                # TODO modify if statement for write to file
+                if currentCommand != "":
+                    returnList.append(currentCommand)
+
+            if self.method == "return":
+                return returnList
+
+            elif self.method == "file":
+                for line in returnList:
+                    gFile.write(line + "\n")
+
+                gFile.close()
+
+                try:
+                    remove("output.gcode")
+                except:
+                    pass
+
+                rename(r"output.txt", r"output.gcode")
+
+                return "output.gcode file generated successfully"
 
     def appendPoints(self, points):
         for point in points:
@@ -223,17 +277,17 @@ class ttg:
 
         return ttg.finalize(self)
 
-    def toGcode(self):
+    def encode(self):
         if self.readyForReturn and self.method == "visualize":
             return self.verts
 
         elif not self.readyForReturn:
             return ttg.collectCharacters(self)
 
-    def toGcodeCustom(self, on, off, fast, slow):
-        self.onCmd = on
-        self.offCmd = off
+    def toGcode(self, onPower, offPower, fast, slow):
+        self.onPowerCmd = onPower
+        self.offPowerCmd = offPower
         self.fastCmd = fast
         self.slowCmd = slow
 
-        return ttg.toGcode(self)
+        return ttg.encode(self)

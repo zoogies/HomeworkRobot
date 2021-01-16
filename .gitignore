@@ -1,6 +1,5 @@
 chromedriver.exe
 loginCreds.txt
-stream.png
-stream_crop.png
 octocontrol.py
 __pycache__
+output.gcode
