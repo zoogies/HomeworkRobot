@@ -2,17 +2,20 @@
 # double check globals, can prob abstract away many things
 # add if switch for returns only if method is return
 # TODO consider putting all the letters in their own class/file/seperate files
+# TODO rewrite space as not just offset
+# TODO do i need to end at 0,0?
 
 import math
 import time
 
 
 class ttg:
-    def __init__(self, text, size, rotation):
+    def __init__(self, text, size, rotation, method):
         # set basic passed args
         self.text = text
         self.size = size
         self.rotation = rotation
+        self.method = method
 
         # set global class vars
         self.rotationNeeded = False
@@ -20,6 +23,7 @@ class ttg:
         self.operations = []
         self.currentXOffset = 0
         self.parsed = False
+        self.verts = []
 
         # set defualts commands, TODO have function thats toGcode with custom commands
         self.offCmd = "M5"
@@ -55,6 +59,7 @@ class ttg:
 
         self.operations.clear()
         self.operations = newOps
+        self.verts += newOps  # TODO might be redundant
 
         # replace placeholder string commands with GCODE commands
         for count, command in enumerate(self.operations):
@@ -67,9 +72,10 @@ class ttg:
             elif command == "slow":
                 self.operations[count] = self.slowCmd
 
-    # TODO find a way to get rid of this function
-    # TODO rewrite space as not just offset
-    def tempOpAdd(self, points):
+        if self.method == "visualize":
+            return newOps
+
+    def appendPoints(self, points):
         for point in points:
             self.operations.append(point)
 
@@ -78,35 +84,43 @@ class ttg:
     def whiteSpace(self):
         self.currentXOffset += 4  # TODO check if this is right for character spaces
 
+    #           .   .
+    #       .           .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .   .   .   .   .   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+
     def a(self):  # TODO rewrite
         xOff = self.currentXOffset
 
         points = [
-            (0 + xOff, 0),
-            (0 + xOff, 1),
-            (0 + xOff, 2),
-            (0 + xOff, 3),
-            (0 + xOff, 4),
-            (1 + xOff, 5),
-            (2 + xOff, 5),
-            (3 + xOff, 5),
-            (4 + xOff, 4),
-            (4 + xOff, 3),
-            (4 + xOff, 2),
-            (3 + xOff, 2),
-            (2 + xOff, 2),
-            (1 + xOff, 2),
-            (0 + xOff, 2),
-            "off",
-            "fast",
-            (4 + xOff, 2),
             "on",
             "slow",
-            (4 + xOff, 1),
-            (4 + xOff, 0),
+            (0 + xOff, 0),
+            (0 + xOff, 7),
+            (1 + xOff, 8),
+            (2 + xOff, 9),
+            (3 + xOff, 9),
+            (4 + xOff, 8),
+            (5 + xOff, 7),
+            (5 + xOff, 0),
+            "off",
+            "fast",
+            (5 + xOff, 4),
+            "on",
+            "slow",
+            (0 + xOff, 4),
+            "off",
+            "fast",
+            (0 + xOff, 0),
         ]
 
-        ttg.tempOpAdd(self, points)
+        ttg.appendPoints(self, points)
 
     # TODO alright heres the requirements for letter verts
     # - every point has a tuple
@@ -152,7 +166,7 @@ class ttg:
             "off",
         ]
 
-        ttg.tempOpAdd(self, points)
+        ttg.appendPoints(self, points)
 
     #       .   .   .   .
     #   .                   .
@@ -186,51 +200,43 @@ class ttg:
             (0 + xOff, 0),
         ]
 
-        ttg.tempOpAdd(self, points)
+        ttg.appendPoints(self, points)
 
     # FOOTER
 
     # get and call functions for letter in given text and append them to queue
     def collectCharacters(self):
-        charList = []
-
         for char in self.text:
-            charList.append(char)
-
-        for char in charList:
             if char == " ":
                 ttg.whiteSpace(self)
                 self.currentXOffset += 8
 
-            elif char == "c" or "C":
-                ttg.c(self)
-                self.currentXOffset += 8
-
-            elif char == "b" or "B":
-                ttg.b(self)
-                self.currentXOffset += 8
-
-            elif char == "a" or "A":
+            if char == "a" or char == "A":
                 ttg.a(self)
                 self.currentXOffset += 8
 
-        ttg.finalize(self)
+            if char == "b" or char == "B":
+                ttg.b(self)
+                self.currentXOffset += 8
 
-        return self.operations  # DEBUG
+            if char == "c" or char == "C":
+                ttg.c(self)
+                self.currentXOffset += 8
 
-    def toGcode(self, method):
-        if self.readyForReturn and method == "return":
-            # TODO make method a self and decide between make file and return at end of parse
-            return "TODO placeholder"
+        return ttg.finalize(self)
+
+    def toGcode(self):
+        if self.readyForReturn and self.method == "visualize":
+            return self.verts
 
         elif not self.readyForReturn:
             return ttg.collectCharacters(self)
 
-    def toGcodeCustom(self, method, on, off, fast, slow):
+    def toGcodeCustom(self, on, off, fast, slow):
         self.onCmd = on
         self.offCmd = off
         self.fastCmd = fast
         self.slowCmd = slow
 
-        if method == "return":  # TODO make this have parity
-            return ttg.toGcode(self, method)
+        if self.method == "visualize":
+            return ttg.toGcode(self)

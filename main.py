@@ -85,8 +85,8 @@ def calculateAnswer():
 def visualize():  # consider moving this into a test
     plotlist = []
 
-    for item in ttg("b", 1, math.radians(0)).toGcodeCustom(
-        "return", "ON", "OFF", "FAST", "SLOW"
+    for item in ttg("a b c   abc", 1, math.radians(90), "visualize").toGcodeCustom(
+        "ON", "OFF", "FAST", "SLOW"
     ):
         if type(item) is tuple:
             plotlist.append(item)
