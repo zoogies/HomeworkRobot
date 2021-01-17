@@ -5,7 +5,6 @@ import pytesseract as tess
 from PIL import Image
 from selenium import webdriver
 from tests import servertest
-from octocontrol import OctoprintAPI
 
 from gcodeLib.rewrite import ttg
 
