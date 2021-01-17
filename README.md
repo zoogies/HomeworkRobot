@@ -14,15 +14,15 @@ Homework robot makes the assumption that you are running a setup very similar to
 
 ## Setup
 
-To run the project successfully you need to have the following done:
+To run the project successfully you need to do the following:
 
-1. [chromedriver downloaded](https://chromedriver.chromium.org/downloads) to root of the directory
+1. [download chromedriver](https://chromedriver.chromium.org/downloads) to root of the directory
 
 2. run the `dependancies.bat` file
 
 3. replace the text in `tesseractPath.txt` with the path to your tesseract install. ex: `C:\Users\USERNAME\AppData\Local\Programs\Tesseract-OCR\tesseract.exe`
 
-4. create `loginCreds.txt` in the root of the directory and type your octoprint username and password **seperated by one space on line 1**
+4. create the file `loginCreds.txt` in the root of the `HomeworkRobot` directory and type your octoprint username and password **seperated by one space on line 1**
 
 5. install ttg lib (TODO this isnt published)
 

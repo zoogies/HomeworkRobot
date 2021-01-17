@@ -1,5 +1,5 @@
 # imports
-import time
+from time import sleep
 import datetime
 import pytesseract as tess
 from PIL import Image
@@ -9,7 +9,7 @@ from tests import servertest
 from gcodeLib.rewrite import ttg
 
 import matplotlib.pyplot as plt
-import math  # TODO pair down imports
+from math import radians  # TODO pair down imports
 
 # TODO throw exception if there is no text files for creds
 
@@ -56,7 +56,7 @@ def getWebcamFrame(waitTime):
 
     driver = createDriver(octoCreds)  # create a new driver
 
-    time.sleep(waitTime)  # wait for stream to load
+    sleep(waitTime)  # wait for stream to load
     driver.execute_script("window.scrollTo(1080, 0)")  # scroll to top right
     driver.save_screenshot("images\\stream.png")  # take screenshot
 
@@ -84,18 +84,18 @@ def calculateAnswer():
         lang="eng",
         config="-c tessedit_char_whitelist=1234567890x",
     )
-    text = text.split(
-        "x"
-    )  # replace this with if statement for logical character contained and then decide how to solve the problem
+
+    # TODO look for key operators and split by that depending on whats shown, then you can do every operation
     # maybe find library that solves from string so that you can do anything
     # check basic validity of answers before engraving
+    text = text.split("x")
     return int(text[0]) * int(text[1])
 
 
 def visualize():  # consider moving this into a test
     plotlist = []
 
-    for item in ttg("a b c   abc", 1, math.radians(offset), "visualize").toGcode(
+    for item in ttg("a b c   abc", 1, radians(offset), "visualize").toGcode(
         "ON", "OFF", "FAST", "SLOW"
     ):
         if type(item) is tuple:
@@ -120,16 +120,10 @@ def sendCommands():
 getWebcamFrame(waitTime)
 calculateAnswer()
 
-# text size in mm
-# S50 isnt nearly enough to engrave
-
-
-visualize()
+# text size is mm
 
 # conscise TODO
 # - pipeline to send commands to printer
-# - take calculated answer and transfer number points to gcode commands for printer
 # - print mount for pi on back of laser
 # - extra cable management
 # - cleanup repo files
-# - electron application?
