@@ -1,6 +1,6 @@
 # Homework Robot - CURRENTLY A WORK IN PROGRESS
 
-[![time tracker](https://wakatime.com/badge/github/Yoyolick/HomeworkRobot.svg)](https://wakatime.com/badge/github/Yoyolick/HomeworkRobot)
+[![time tracker](https://wakatime.com/badge/github/Yoyolick/HomeworkRobot.svg)](https://wakatime.com/badge/github/Yoyolick/HomeworkRobot) [![Maintainability](https://api.codeclimate.com/v1/badges/d02830cae1461df36a87/maintainability)](https://codeclimate.com/github/Yoyolick/HomeworkRobot/maintainability)
 
 A WIP codebase to solve math problems and laser engrave them onto the worksheet.
 
