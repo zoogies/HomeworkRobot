@@ -12,10 +12,13 @@ from gcodeLib.rewrite import ttg
 import matplotlib.pyplot as plt
 import math  # TODO pair down imports
 
+# TODO throw exception if there is no text files for creds
+
 # set offset for image rotation, should be fed from electron later (potentially)
 offset = 0  # or just prompt at the beginning or as an optional arg
 octoCreds = ""
 waitTime = 30
+
 # test server connection
 def testConnection(ip, port):
     return servertest.tests().connectTest(ip, port)
