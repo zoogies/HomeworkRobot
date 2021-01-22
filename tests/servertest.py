@@ -1,7 +1,9 @@
 import socket
+
+
 class tests:
-    def connectTest(self,ip,port):
+    def connectTest(self, ip, port):
         try:
-            return(socket.getaddrinfo(ip, port))
+            return socket.getaddrinfo(ip, port)
         except:
-            return("server failure")
+            return "server failure"
