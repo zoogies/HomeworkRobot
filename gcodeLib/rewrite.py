@@ -240,6 +240,7 @@ class ttg:
             (4 + xOff, 0),
             (0 + xOff, 0),
             "off",
+            "fast",
         ]
 
         ttg.appendPoints(self, points)
@@ -303,6 +304,490 @@ class ttg:
             (4 + xOff, 1),
             (3 + xOff, 0),
             (0 + xOff, 0),
+            "off",
+            "fast",
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #   .   .   .   .   .   .
+    #   .
+    #   .
+    #   .
+    #   .   .   .   .   .   .
+    #   .
+    #   .
+    #   .
+    #   .
+    #   .   .   .   .   .   .
+
+    def e(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (0 + xOff, 9),
+            (5 + xOff, 9),
+            "off",
+            "fast",
+            (5 + xOff, 5),
+            "on",
+            "slow",
+            (0 + xOff, 5),
+            "off",
+            "fast",
+            (5 + xOff, 0),
+            "on",
+            "slow",
+            (0 + xOff, 0),
+            "off",
+            "fast",
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #   .   .   .   .   .   .
+    #   .
+    #   .
+    #   .
+    #   .
+    #   .   .   .   .   .   .
+    #   .
+    #   .
+    #   .
+    #   .
+
+    def f(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (0 + xOff, 9),
+            (5 + xOff, 9),
+            "off",
+            "fast",
+            (5 + xOff, 5),
+            "on",
+            "slow",
+            (0 + xOff, 5),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #       .   .   .   .
+    #   .                   .
+    #   .
+    #   .
+    #   .
+    #   .               .   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #       .   .   .   .
+
+    def g(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "off",
+            "fast",
+            (5 + xOff, 8),
+            "on",
+            "slow",
+            (4 + xOff, 9),
+            (1 + xOff, 9),
+            (0 + xOff, 8),
+            (0 + xOff, 1),
+            (1 + xOff, 0),
+            (4 + xOff, 0),
+            (5 + xOff, 1),
+            (5 + xOff, 4),
+            (4 + xOff, 4),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #       .   .   .   .
+    #   .                   .
+    #   .
+    #   .
+    #   .
+    #   .               .   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #       .   .   .   .
+
+    def h(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "off",
+            "fast",
+            (5 + xOff, 8),
+            "on",
+            "slow",
+            (4 + xOff, 9),
+            (1 + xOff, 9),
+            (0 + xOff, 8),
+            (0 + xOff, 1),
+            (1 + xOff, 0),
+            (4 + xOff, 0),
+            (5 + xOff, 1),
+            (5 + xOff, 4),
+            (4 + xOff, 4),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #   .   .   .   .   .
+    #           .
+    #           .
+    #           .
+    #           .
+    #           .
+    #           .
+    #           .
+    #           .
+    #   .   .   .   .   .
+
+    def i(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (4 + xOff, 0),
+            "off",
+            "fast",
+            (4 + xOff, 9),
+            "on",
+            "slow",
+            (0 + xOff, 9),
+            "off",
+            "fast",
+            (2 + xOff, 9),
+            "on",
+            "slow",
+            (2 + xOff, 0),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #   .   .   .   .   .
+    #           .
+    #           .
+    #           .
+    #           .
+    #           .
+    #           .
+    #           .
+    #           .
+    #   .   .
+
+    def j(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (1 + xOff, 0),
+            (2 + xOff, 1),
+            (2 + xOff, 9),
+            (0 + xOff, 9),
+            "off",
+            "fast",
+            (2 + xOff, 9),
+            "on",
+            "slow",
+            (4 + xOff, 9),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .               .
+    #   .           .
+    #   .   .   .
+    #   .           .
+    #   .               .
+    #   .                   .
+    #   .                   .
+
+    def k(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (0 + xOff, 9),
+            "off",
+            "fast",
+            (5 + xOff, 9),
+            "on",
+            "slow",
+            (5 + xOff, 7),
+            (4 + xOff, 6),
+            (3 + xOff, 5),
+            (2 + xOff, 4),
+            (1 + xOff, 4),
+            (2 + xOff, 4),
+            (3 + xOff, 3),
+            (4 + xOff, 2),
+            (5 + xOff, 1),
+            (5 + xOff, 0),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #   .            
+    #   .            
+    #   .            
+    #   .        
+    #   .    
+    #   .
+    #   .    
+    #   .        
+    #   .            
+    #   .   .   .   .   .   .
+
+    def l(self):
+        xOff = self.currentXOffset
+
+        points = [
+            (0 + xOff, 9),
+            "on",
+            "slow",
+            (0 + xOff, 0),
+            (5 + xOff, 0),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #   .                       .            
+    #   .   .               .   .            
+    #   .       .       .       .            
+    #   .           .           .        
+    #   .           .           .    
+    #   .                       .
+    #   .                       .    
+    #   .                       .                 
+    #   .                       .                       
+    #   .                       .           
+
+    def m(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (0 + xOff, 9),
+            (1 + xOff, 8),
+            (2 + xOff, 7),
+            (3 + xOff, 6),
+            (3 + xOff, 5),
+            (3 + xOff, 6),
+            (4 + xOff, 7),
+            (5 + xOff, 8),
+            (6 + xOff, 9),
+            (6 + xOff, 0),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #   .                   . APROXIMATE, letting the cnc handle this movement
+    #   . .                 .
+    #   .   .               .
+    #   .      .            .
+    #   .                   .
+    #   .        .          .
+    #   .                   .
+    #   .          .        .
+    #   .             .     .
+    #   .                .  .      
+
+    def n(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (0 + xOff, 9),
+            (5 + xOff, 0),
+            (5 + xOff, 9),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #       .   .   .   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #       .   .   .   .     
+
+    def o(self):
+        xOff = self.currentXOffset
+
+        points = [
+            (0 + xOff, 1),
+            "on",
+            "slow",
+            (0 + xOff, 8),
+            (1 + xOff, 9),
+            (4 + xOff, 9),
+            (5 + xOff, 8),
+            (5 + xOff, 1),
+            (4 + xOff, 0),
+            (1 + xOff, 0),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #       .   .   .   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .   .   .   .   .
+    #   .
+    #   .
+    #   .
+    #   .
+
+    def p(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (0 + xOff, 8),
+            (1 + xOff, 9),
+            (4 + xOff, 9),
+            (5 + xOff, 8),
+            (5 + xOff, 5),
+            (4 + xOff, 4),
+            (0 + xOff, 4),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #       .   .   .   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+    #   .               .
+    #       .   .   .       .
+
+    def q(self):
+        xOff = self.currentXOffset
+
+        points = [
+            (0 + xOff, 1),
+            "on",
+            "slow",
+            (0 + xOff, 8),
+            (1 + xOff, 9),
+            (4 + xOff, 9),
+            (5 + xOff, 8),
+            (5 + xOff, 2),
+            (4 + xOff, 1),
+            (5 + xOff, 0),
+            "off",
+            "fast",
+            (3 + xOff, 0),
+            "on",
+            "slow",
+            (1 + xOff, 0),
+            "off",
+            "fast",
+            (0 + xOff, 0),
+        ]
+
+        ttg.appendPoints(self, points)
+
+    #       .   .   .
+    #   .               .
+    #   .                   .
+    #   .                   .
+    #   .               .
+    #   .   .   .   .   
+    #   .               .
+    #   .                   .
+    #   .                   .
+    #   .                   .
+
+    def r(self):
+        xOff = self.currentXOffset
+
+        points = [
+            "on",
+            "slow",
+            (0 + xOff, 8),
+            (1 + xOff, 9),
+            (3 + xOff, 9),
+            (4 + xOff, 8),
+            (5 + xOff, 7),
+            (5 + xOff, 6),
+            (4 + xOff, 5),
+            (3 + xOff, 4),
+            (0 + xOff, 4),
+            "off",
+            "fast",
+            (3 + xOff, 4),
+            "on",
+            "slow",
+            (4 + xOff, 3),
+            (5 + xOff, 2),
+            (5 + xOff, 0),
+            "off",
+            "fast",
+            (0 + xOff, 0),
         ]
 
         ttg.appendPoints(self, points)
@@ -330,6 +815,134 @@ class ttg:
 
             if char == "d" or char == "D":
                 ttg.d(self)
+                self.currentXOffset += 8
+
+            if char == "e" or char == "E":
+                ttg.e(self)
+                self.currentXOffset += 8
+
+            if char == "f" or char == "F":
+                ttg.f(self)
+                self.currentXOffset += 8
+
+            if char == "g" or char == "G":
+                ttg.g(self)
+                self.currentXOffset += 8
+
+            if char == "h" or char == "H":
+                ttg.h(self)
+                self.currentXOffset += 8
+
+            if char == "i" or char == "I":
+                ttg.i(self)
+                self.currentXOffset += 7
+
+            if char == "j" or char == "J":
+                ttg.j(self)
+                self.currentXOffset += 7
+
+            if char == "k" or char == "K":
+                ttg.k(self)
+                self.currentXOffset += 8
+
+            if char == "l" or char == "L":
+                ttg.l(self)
+                self.currentXOffset += 8
+
+            if char == "m" or char == "M":
+                ttg.m(self)
+                self.currentXOffset += 8
+
+            if char == "n" or char == "N":
+                ttg.n(self)
+                self.currentXOffset += 8
+
+            if char == "o" or char == "O":
+                ttg.o(self)
+                self.currentXOffset += 8
+
+            if char == "p" or char == "P":
+                ttg.p(self)
+                self.currentXOffset += 8
+
+            if char == "q" or char == "Q":
+                ttg.q(self)
+                self.currentXOffset += 8
+
+            if char == "r" or char == "R":
+                ttg.r(self)
+                self.currentXOffset += 8
+
+            if char == "s" or char == "S":
+                ttg.s(self)
+                self.currentXOffset += 8
+
+            if char == "t" or char == "T":
+                ttg.t(self)
+                self.currentXOffset += 8
+
+            if char == "u" or char == "U":
+                ttg.u(self)
+                self.currentXOffset += 8
+
+            if char == "v" or char == "V":
+                ttg.v(self)
+                self.currentXOffset += 8
+
+            if char == "w" or char == "W":
+                ttg.w(self)
+                self.currentXOffset += 8
+
+            if char == "x" or char == "X":
+                ttg.x(self)
+                self.currentXOffset += 8
+
+            if char == "y" or char == "Y":
+                ttg.y(self)
+                self.currentXOffset += 8
+
+            if char == "z" or char == "Z":
+                ttg.z(self)
+                self.currentXOffset += 8
+
+            if char == "1"
+                ttg.one(self)
+                self.currentXOffset += 8
+            
+            if char == "2"
+                ttg.two(self)
+                self.currentXOffset += 8
+
+            if char == "3"
+                ttg.three(self)
+                self.currentXOffset += 8
+
+            if char == "4"
+                ttg.four(self)
+                self.currentXOffset += 8
+
+            if char == "5"
+                ttg.five(self)
+                self.currentXOffset += 8
+
+            if char == "6"
+                ttg.six(self)
+                self.currentXOffset += 8
+
+            if char == "7"
+                ttg.seven(self)
+                self.currentXOffset += 8
+
+            if char == "8"
+                ttg.eight(self)
+                self.currentXOffset += 8
+
+            if char == "9"
+                ttg.nine(self)
+                self.currentXOffset += 8
+
+            if char == "0"
+                ttg.zero(self)
                 self.currentXOffset += 8
 
         return ttg.finalize(self)

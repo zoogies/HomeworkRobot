@@ -95,9 +95,9 @@ def calculateAnswer():
 def visualize():  # consider moving this into a test
     plotlist = []
 
-    for item in ttg("a b c d  abcd", 1, radians(offset), "visualize", 500).toGcode(
-        "ON", "OFF", "FAST", "SLOW"
-    ):
+    for item in ttg(
+        "a b c d e f g abcdefg", 1, radians(offset), "visualize", 500
+    ).toGcode("ON", "OFF", "FAST", "SLOW"):
         if type(item) is tuple:
             plotlist.append(item)
 
