@@ -95,7 +95,7 @@ def calculateAnswer():
 def visualize():  # consider moving this into a test
     plotlist = []
 
-    for item in ttg("a b c   abc", 1, radians(offset), "visualize").toGcode(
+    for item in ttg("a b c d  abcd", 1, radians(offset), "visualize", 500).toGcode(
         "ON", "OFF", "FAST", "SLOW"
     ):
         if type(item) is tuple:
@@ -117,11 +117,20 @@ def sendCommands():
     createDriver(octoCreds)
 
 
-getWebcamFrame(waitTime)
-calculateAnswer()
+# getWebcamFrame(waitTime)
+# calculateAnswer()
+"""
+print(
+    ttg("a b c d  abcd", 1, radians(offset), "file", 2000).toGcode(
+        "M03 S500", "M05 S0", "G0", "G1"
+    )
+)
+"""
+# on off format is
+# M05 S0, M03 S500
 
 # text size is mm
-
+visualize()
 # conscise TODO
 # - pipeline to send commands to printer
 # - print mount for pi on back of laser
