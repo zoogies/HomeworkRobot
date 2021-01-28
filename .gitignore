@@ -3,3 +3,4 @@ loginCreds.txt
 octocontrol.py
 __pycache__
 output.gcode
+debug.log
