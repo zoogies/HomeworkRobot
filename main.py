@@ -186,12 +186,7 @@ except:
         "- ERROR - selenium is stupid, please modify main.py and make the sleep last longer",
     )
 
-# TODO
-# Traceback (most recent call last):
-#   File "c:\Users\swoos\Documents\GitHub\HomeworkRobot\main.py", line 173, in <module>
-#     terminal.sendKeys("G0X10")
-# AttributeError: 'WebElement' object has no attribute 'sendKeys'
-# G92X0Y0
-
+# TODO the zeroing of the toolhead is challenging and needs to be set at 0 from a certain starting position too
+# past ryan would reccomend starting X0Y0Z10 (10 above) - this requires figuring out the + - axis of z
 # TODO ttglib validate input data and return errors
 # TODO ttglib missing a G0
