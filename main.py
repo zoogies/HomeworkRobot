@@ -40,7 +40,9 @@ def waitForElement(elementName):
             ec.visibility_of_element_located((By.ID, elementName))
         )
     except:
-        print("ERROR - selenium timout after", waitTime, "seconds")
+        print(
+            datetime.time.now(), "- ERROR - selenium timout after", waitTime, "seconds"
+        )
         exit()
 
 
@@ -77,6 +79,7 @@ def calculateAnswer():
     )
 
     # TODO check basic validity of answers before engraving
+    # TODO make string parser
 
     print(datetime.datetime.now(), "- DETECTED TEXT -", text)
     if "x" in text:
@@ -133,8 +136,6 @@ im = im.point(lambda x: 0 if x < 80 else 255)  # threshold (binarize)
 im = im.crop((216, 436, 434, 555))  # crop out corners of webpage
 im = ImageOps.invert(im).save("images\\stream.png")
 
-print(calculateAnswer())
-
 # visualize(str(calculateAnswer()))
 
 # MODEL:
@@ -162,16 +163,35 @@ waitForElement("term_link")
 
 driver.find_element_by_id("term_link").click()  # focus terminal
 
-waitForElement("terminal-command")
+# using sleep here physically hurts my brain but literally
+# nothing else works because selenium waiting for dynamic
+# elements to become enabled is stupid and broken
+sleep(4)
 
-sleep(5)
-terminal = driver.find_element_by_id("terminal-command")
-print(terminal)
-terminal.sendKeys("G0X10")
-terminal.send_keys(Keys.ENTER)
+visualize(str(calculateAnswer()))
+
+try:
+
+    for command in ttg((str(calculateAnswer())), 1, 0, "return", 2000).toGcode(
+        "Z10", "Z0", "G0", "G1"
+    ):
+        # print(command)
+        sleep(1)
+        driver.find_element_by_id("terminal-command").send_keys(command)
+        driver.find_element_by_id("terminal-command").send_keys(Keys.ENTER)
+
+except:
+    print(
+        datetime.datetime.now(),
+        "- ERROR - selenium is stupid, please modify main.py and make the sleep last longer",
+    )
 
 # TODO
 # Traceback (most recent call last):
 #   File "c:\Users\swoos\Documents\GitHub\HomeworkRobot\main.py", line 173, in <module>
 #     terminal.sendKeys("G0X10")
 # AttributeError: 'WebElement' object has no attribute 'sendKeys'
+# G92X0Y0
+
+# TODO ttglib validate input data and return errors
+# TODO ttglib missing a G0
