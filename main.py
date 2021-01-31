@@ -34,6 +34,16 @@ def testConnection(ip, port):
     return servertest.tests().connectTest(ip, port)
 
 
+def waitForElement(elementName):
+    try:
+        WebDriverWait(driver, waitTime).until(
+            ec.visibility_of_element_located((By.ID, elementName))
+        )
+    except:
+        print("ERROR - selenium timout after", waitTime, "seconds")
+        exit()
+
+
 def visualize(text):  # consider moving this into a test
     plotlist = []
 
@@ -104,13 +114,7 @@ print(datetime.datetime.now(), "- logged in")
 # take screenshot of webcam as well as trim and rotate it by specified offset
 
 # wait for stream to load
-try:
-    WebDriverWait(driver, waitTime).until(
-        ec.visibility_of_element_located((By.ID, "webcam_image_framing"))
-    )
-except:
-    print("ERROR - selenium timout after", waitTime, "seconds")
-    exit()
+waitForElement("webcam_image_framing")
 
 driver.execute_script("window.scrollTo(1080, 0)")  # scroll to top right
 driver.save_screenshot("images\\stream.png")  # take screenshot
@@ -154,23 +158,12 @@ driver.find_element_by_id("login-password").send_keys(octoCreds[1])  # enter pas
 driver.find_element_by_id("login-button").click()  # login
 print(datetime.datetime.now(), "- logged in")
 
-try:
-    WebDriverWait(driver, waitTime).until(
-        ec.visibility_of_element_located((By.ID, "term_link"))
-    )
-except:
-    print("ERROR - selenium timout after", waitTime, "seconds")
-    exit()
+waitForElement("term_link")
 
 driver.find_element_by_id("term_link").click()  # focus terminal
 
-try:
-    WebDriverWait(driver, waitTime).until(
-        ec.visibility_of_element_located((By.ID, "terminal-command"))
-    )
-except:
-    print("ERROR - selenium timout after", waitTime, "seconds")
-    exit()
+waitForElement("terminal-command")
+
 sleep(5)
 terminal = driver.find_element_by_id("terminal-command")
 print(terminal)
