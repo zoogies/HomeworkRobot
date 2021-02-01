@@ -1,6 +1,6 @@
 # imports
 from time import sleep
-import datetime
+from datetime import datetime
 import pytesseract as tess
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 from selenium import webdriver
@@ -41,7 +41,10 @@ def waitForElement(elementName):
         )
     except:
         print(
-            datetime.time.now(), "- ERROR - selenium timout after", waitTime, "seconds"
+            datetime.now(),
+            "- ERROR - selenium timout after",
+            waitTime,
+            "seconds",
         )
         exit()
 
@@ -81,7 +84,7 @@ def calculateAnswer():
     # TODO check basic validity of answers before engraving
     # TODO make string parser
 
-    print(datetime.datetime.now(), "- DETECTED TEXT -", text)
+    print(datetime.now(), "- DETECTED TEXT -", text)
     if "x" in text:
         text = text.split("x")
         return int(text[0]) * int(text[1])
@@ -108,11 +111,11 @@ driver = webdriver.Chrome(path, options=op)
 
 # send webdriver to local octoprint page and login
 driver.get("http://octopi.local/?#control")  # redirect to webcam page
-print(datetime.datetime.now(), "- driver started")
+print(datetime.now(), "- driver started")
 driver.find_element_by_id("login-user").send_keys(octoCreds[0])  # enter username
 driver.find_element_by_id("login-password").send_keys(octoCreds[1])  # enter password
 driver.find_element_by_id("login-button").click()  # login
-print(datetime.datetime.now(), "- logged in")
+print(datetime.now(), "- logged in")
 
 # take screenshot of webcam as well as trim and rotate it by specified offset
 
@@ -121,9 +124,9 @@ waitForElement("webcam_image_framing")
 
 driver.execute_script("window.scrollTo(1080, 0)")  # scroll to top right
 driver.save_screenshot("images\\stream.png")  # take screenshot
-print(datetime.datetime.now(), "- screenshot taken")
+print(datetime.now(), "- screenshot taken")
 driver.quit()  # terminate driver
-print(datetime.datetime.now(), "- driver quit")
+print(datetime.now(), "- driver quit")
 
 # crop screenshot for parsing
 im = Image.open("images\\stream.png")  # load the image
@@ -153,11 +156,11 @@ driver = webdriver.Chrome(path)
 
 # send webdriver to local octoprint page and login
 driver.get("http://octopi.local/#term")  # redirect to webcam page
-print(datetime.datetime.now(), "- driver started")
+print(datetime.now(), "- driver started")
 driver.find_element_by_id("login-user").send_keys(octoCreds[0])  # enter username
 driver.find_element_by_id("login-password").send_keys(octoCreds[1])  # enter password
 driver.find_element_by_id("login-button").click()  # login
-print(datetime.datetime.now(), "- logged in")
+print(datetime.now(), "- logged in")
 
 waitForElement("term_link")
 
@@ -166,27 +169,64 @@ driver.find_element_by_id("term_link").click()  # focus terminal
 # using sleep here physically hurts my brain but literally
 # nothing else works because selenium waiting for dynamic
 # elements to become enabled is stupid and broken
-sleep(4)
+sleep(5)
+# TODO maybe try except select until it works
 
-visualize(str(calculateAnswer()))
+# visualize(str(calculateAnswer()))
 
 try:
+    # NOTES
+    # - need to have the toolhead the highest it can go and zero it there
+    # - touching the paper is Z-44
+    # - for move ops it shoudld be -40
 
-    for command in ttg((str(calculateAnswer())), 1, 0, "return", 2000).toGcode(
-        "Z10", "Z0", "G0", "G1"
+    # setup commands
+    # zero at top
+    driver.find_element_by_id("terminal-command").send_keys(
+        "G92X0Y0Z0"
+    )  # this might need to move to like the top left of page if do multiple in one process
+    driver.find_element_by_id("terminal-command").send_keys(Keys.ENTER)
+    print(datetime.now, "- zeroing x y and z axis")
+    sleep(1)  # give a sec between startup commands
+
+    # move down offset on y so we dont write ON the text
+    driver.find_element_by_id("terminal-command").send_keys("G0Y-10")
+    driver.find_element_by_id("terminal-command").send_keys(Keys.ENTER)
+    print(datetime.now, "- moving below text")
+    sleep(3)  # give toolhead a second to move
+
+    # move down to hover position
+    driver.find_element_by_id("terminal-command").send_keys("G0Z-40")
+    driver.find_element_by_id("terminal-command").send_keys(Keys.ENTER)
+    print(datetime.now, "- moving pen down to rest position")
+    sleep(5)  # give toolhead a second to move
+
+    for command in ttg((str(calculateAnswer())), 2, 0, "return", 2000).toGcode(
+        "Z-44", "Z-40", "G0", "G1"
     ):
-        # print(command)
+        print(command)
         sleep(1)
         driver.find_element_by_id("terminal-command").send_keys(command)
         driver.find_element_by_id("terminal-command").send_keys(Keys.ENTER)
 
-except:
+except Exception as error:
     print(
-        datetime.datetime.now(),
+        datetime.now(),
         "- ERROR - selenium is stupid, please modify main.py and make the sleep last longer",
     )
+    print(error)
+    driver.quit()  # terminate driver
+    exit()
 
-# TODO the zeroing of the toolhead is challenging and needs to be set at 0 from a certain starting position too
-# past ryan would reccomend starting X0Y0Z10 (10 above) - this requires figuring out the + - axis of z
+input("press any key to close ")
+driver.quit()  # terminate driver
+exit()
 # TODO ttglib validate input data and return errors
 # TODO ttglib missing a G0
+
+
+# TODO
+# - speed between points
+# - lib optimizations not to return to zero, (understand whole context of text and move to next point)
+# - make it not write on top of the text lmao, make offset under
+# - auto calculate from string
