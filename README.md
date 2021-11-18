@@ -1,4 +1,4 @@
-# Homework Robot - CURRENTLY A WORK IN PROGRESS
+# Homework Robot
 
 [![time tracker](https://wakatime.com/badge/github/Yoyolick/HomeworkRobot.svg)](https://wakatime.com/badge/github/Yoyolick/HomeworkRobot) [![Maintainability](https://api.codeclimate.com/v1/badges/d02830cae1461df36a87/maintainability)](https://codeclimate.com/github/Yoyolick/HomeworkRobot/maintainability)
 
@@ -24,7 +24,7 @@ To run the project successfully you need to do the following:
 
 4. create the file `loginCreds.txt` in the root of the `HomeworkRobot` directory and type your octoprint username and password **seperated by one space on line 1**
 
-5. install ttg lib (TODO this isnt published)
+5. [install ttg lib](https://github.com/Yoyolick/TextToGcode) as a library through pip
 
 ## Usage
 
